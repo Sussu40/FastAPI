@@ -1,6 +1,8 @@
 import pandas as pd
 import numpy as np
 
+# Objectif du fichier : créer un nouveau csv contenant des séries perdantes et la variable cible
+
 data = pd.read_csv("EuroMillions_numbers.csv", sep=";")#, index_col=0)
 # Tri par date
 data = data.sort_index(axis=0, ascending=True)
