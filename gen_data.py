@@ -1,3 +1,11 @@
+""" Script de génération de données
+Génère des données de tirages non-gagnants, et les ajoute à la liste des tirages gagnants 
+
+Parametres :
+    (Optionnel) le nombre de tirages perdants à ajouter par tirage gagnant, par défaut 100
+    (Optionnel) le fichier où enregistrer les données, par défaut app/data/data.csv
+"""
+
 from app.data.data_processing.preprocessing import data_generator_x
 import pandas as pd
 import sys

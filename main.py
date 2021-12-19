@@ -23,7 +23,14 @@ async def root():
 #Predict
 @app.post("/api/predict")
 async def predictProbaFromProposal(tirage : Tirage):
-    """ Predit la probabilité que le tirage soit gagnant """
+    """ Predit la probabilité que le tirage soit gagnant 
+    
+    Params: 
+        tirage (Tirage): le tirage à évaluer (suite de 5 numéros + 2 numéros étoiles)
+    
+    Returns:
+        le dictionnaire contenant la probabilité de victoire du tirage
+    """
     # TODO : choix de la date du tirage ? 
     model = ml_models.charger_modele()
     x = [tirage.N1, tirage.N2, tirage.N3, tirage.N4, tirage.N5, tirage.E1, tirage.E2]
@@ -33,7 +40,17 @@ async def predictProbaFromProposal(tirage : Tirage):
 
 @app.get("/api/predict/")
 async def generateListOfWinableNumbers(objectif : float=0.1):
-    """ Génère une suite de numéro qui ont une probabilité importante de gagner """
+    """ Génère une suite de numéro qui ont une probabilité importante de gagner 
+    
+    Params:
+        objectif (float): la probabilité minimale visée
+    
+    Returns:
+        le dictionnaire contenant : 
+            un message indiquant si un tirage vérifiant la condition a été trouvé
+            le tirage correspondant (celui qui vérifie la condition ou le meilleur visité par l'algorithme)
+            la probabilité de gagner du tirage
+    """
     model = ml_models.charger_modele()
     # Trouve un tirage avec une probabilité de gagner > objectif, ou la plus proche si elle n'a pas été toruvée
     tirage, prob, valide = ml_models.tirer_un_bon(model, objectif)
@@ -43,13 +60,30 @@ async def generateListOfWinableNumbers(objectif : float=0.1):
 #Model
 @app.get("/api/model")
 async def GetModelInformations():
-    """ Permet d'obtenir les informations techniques du modele """
+    """ Permet d'obtenir les informations techniques du modele 
+    
+    Returns :
+        le dictionnaire contenant l'ensemble des informations importantes
+    """
     data_model = utils.lire_data_model()
     return data_model["Valeur"]
 
 @app.put("/api/model")
 async def addDataToModel(tirage : Tirage, date : datetime.date, winner : int, gain : int):
-    """ Permet d'enrichir le modele d'une donnee supplementaire """
+    """ Permet d'enrichir le modele d'une donnee supplementaire 
+        Vérifie dans un premier lieu que la donnée correspond à un tirage
+    
+    Params:
+        tirage (Tirage): le tirage à enregistrer
+        date (datetime.date): la date correspondante
+        winner (int): le nombre de gagnants
+        gain (int): le gain 
+    
+    Returns:
+        le dictionnaire contenant 
+            soit un message d'erreur si le tirage n'est pas valide
+            soit un message de succès et l'ensemble des données enregistrées
+    """
     # vérification du format des données
     if not utils.check_data(tirage) :
         return {"Erreur": "Impossible d'ajouter une donnée de ce format"}

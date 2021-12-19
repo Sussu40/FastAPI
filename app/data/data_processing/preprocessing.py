@@ -1,8 +1,10 @@
+""" Objectif : traiter les données du fichier source 
+    pour creer un fichier de données utilisable pour entrainer nos modèles
+    en ajoutant des données de tirages non-gagnants à la liste des tirages gagnants
+"""
 import pandas as pd
 import numpy as np
 from ...endpoints.utils import serie_generator
-
-# Objectif du fichier : créer un nouveau csv contenant des séries perdantes et la variable cible
 
 
 def data_generator(data, date):

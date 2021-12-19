@@ -1,3 +1,5 @@
+""" Contient les fonctions utilitaires de l'application. """
+
 import pandas as pd
 import numpy as np
 import datetime
