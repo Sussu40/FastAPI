@@ -1,5 +1,7 @@
 # Prediction des tirage de l'EuroMillion
 
+***AUTEURS : Arthur Molia, Mathieu Surman, Roxane Chatry***
+
 <p>Objectif du projet : exploiter les données des tirages gagnants de l'EuroMillion pour prédire les prochains tirages</p>
 
 <p>Le projet est réalisé en Python, en utilisant FastApi pour l'interface, et scikit-learn pour les modèles prédictifs</p>
