@@ -26,7 +26,7 @@ def data_generator(data, date):
     return data
 
 
-def data_generator_x_sorted(data, x, file):
+def data_generator_x_sorted(data, file, x:int=100):
     """ Génère x tirages non-gagnants par tirage gagnant
         les ajoute au dataframe des données
         Puis enregistre le tout dans un fichier (csv)
@@ -63,7 +63,7 @@ def data_generator_x_sorted(data, x, file):
     print("Les {} données générées ont bien été ajoutées au fichier {}".format(x*size, file))
 
 
-def data_generator_x(data, x:int=100, file):
+def data_generator_x(data, file, x:int=100):
     """ Génère x tirages non-gagnants par tirage gagnant
         les ajoute au dataframe des données
         Puis enregistre le tout dans un fichier (csv)
