@@ -1,9 +1,11 @@
 ,Valeur
+Variables,"['N1', 'N2', 'N3', 'N4', 'N5', 'E1', 'E2', 'Annee', 'Mois', 'Jour', 'Delta']"
+Nombre de données,264918
+Pourcentage des données utilisé pour le test,0.2
+Pourcentage de tirages gagnants,0.005
 Modele,Random Forest
-Accuracy,0.9895582932692307
-Precision,0.8
-Recall,0.014234875444839857
-Probabilité moyenne,0.012434269831730769
-Pourcentage de gagnants,0.01
-Nombre de données,133118
-Jeu de test,0.2
+Accuracy,0.9951683527102522
+Precision,0.75
+Recall,0.011627906976744186
+Probabilité moyenne,0.006370224973576928
+Intervalle de Probalilité,"[0.0, 0.57]"
