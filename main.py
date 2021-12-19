@@ -30,10 +30,11 @@ async def predictProbaFromProposal(tirage : Tirage):
 
 #Genere une suite de numéro qui ont une probabilité importante de gagner
 @app.get("/api/predict/{objectif}")
-async def generateListOfWinableNumbers(objectif : float):
+async def generateListOfWinableNumbers(objectif : float=0.1):
     model = ml_models.charger_modele()
-    tirage, prob = ml_models.tirer_un_bon(model, objectif)
-    return{"Tirage": str(tirage), "probabilite": prob}
+    tirage, prob, valide = ml_models.tirer_un_bon(model, objectif)
+    message = "Une combinaison probable a été trouvée !" if valide else "Aucune combinaison valable, la meilleure rencontrée est :"
+    return{"Resultat": message, "Tirage": str(tirage), "probabilite": prob}
 
 #Model
 @app.get("/api/model")

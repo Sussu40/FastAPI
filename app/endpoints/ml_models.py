@@ -158,7 +158,7 @@ def tirer_un_bon(model, prob_min):
             sinon le tirage le plus probable visité
     """
 
-    Kmax = 10**5 # Nombre d'irérations max
+    Kmax = 10**3 # Nombre d'irérations max
     k = 0 # compteur d'itérations
     tirage_best = [] # enregistrement du meilleur tirage visité
     prob_best = 0 # et de sa probabilité de gagner
@@ -169,10 +169,10 @@ def tirer_un_bon(model, prob_min):
         tirage = serie_generator()
         prob = predire(model=model, x=tirage)
         if prob >= prob_min:
-            return tirage, prob
+            return tirage, prob, True
         if prob > prob_best:
             tirage_best = tirage
             prob_best = prob
         k += 1
     
-    return tirage_best, prob_best
+    return tirage_best, prob_best, False
