@@ -25,7 +25,15 @@ from ...endpoints.utils import serie_generator
 
 
 def data_generator(data, date):
-    """ Génération d'une suite de numéros et l'ajoute aux données"""
+    """ Génération d'une suite de numéros et l'ajoute aux données
+    
+        Params:
+        data (pd.df): dataframe contenant la liste de tirages gagnants
+        date (str): date du tirage généré
+
+    Returns:
+        pd.df : le dataframe avec le nouveau tirage ajouté
+    """
     liste = list(np.zeros(9)) # ligne de données
     # liste[0] = date # premier élément = date du tirage
     liste[:7] = serie_generator() # 7 données suivantes = un tirage aléatoire
@@ -86,8 +94,9 @@ def data_generator_x(data, x, file):
         None
     """
     size = len(data)
-    # on ajoute x données fausses pour une vraie
+    # on ajoute x tirages perdants pour un tirage gagnant
     for k in range(size):
+        # récupère la date du tirage gagnant
         date = data["Date"][k]
         for i in range(x) : 
             data = data_generator(data, date)
