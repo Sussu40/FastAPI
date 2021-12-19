@@ -29,7 +29,7 @@ async def predictProbaFromProposal(tirage : Tirage):
     return{"Probabilité de gagner": prob}
 
 #Genere une suite de numéro qui ont une probabilité importante de gagner
-@app.get("/api/predict/{objectif}")
+@app.get("/api/predict/")
 async def generateListOfWinableNumbers(objectif : float=0.1):
     model = ml_models.charger_modele()
     tirage, prob, valide = ml_models.tirer_un_bon(model, objectif)
