@@ -24,7 +24,6 @@ async def root():
 @app.post("/api/predict")
 async def predictProbaFromProposal(tirage : Tirage):
     """ Predit la probabilité que le tirage soit gagnant """
-    # TODO : choix de la date du tirage ? 
     model = ml_models.charger_modele()
     x = [tirage.N1, tirage.N2, tirage.N3, tirage.N4, tirage.N5, tirage.E1, tirage.E2]
     # Prédit la probabilité que la suite x de nombre soit gagnante selon le modèle
