@@ -10,8 +10,20 @@ from .utils import serie_generator
 import datetime
 import joblib
 
-def lecture_donnees(file):
-
+def traitement_donnees(file):
+    """ Lis les données du fichier 
+        et les transforme pour être utilisable dans l'entrainement du modele
+    
+    Args:
+        file (str): le chemin du fichier contenant les données (.csv)
+    
+    Returns:
+        X_train (np.array): les variables explicatives des données d'entrainement
+        y_train (np.array): vecteur de la variable cible des données d'entrainement
+        X_test (np.array): les variables explicatives des données de test
+        y_test (np.array): vecteur de la variable cible des données de test
+        infos (pandas.df): dataframe contenant certaines informations sur les données utilisées
+    """
     data = pd.read_csv(file,sep=",", index_col=0)
     size = len(data)
     # transformation de la date en variable quantitative
@@ -49,6 +61,21 @@ def lecture_donnees(file):
 
 
 def entrainement(X_train, X_test, y_train, y_test, infos):
+    """ Entraine le modèle sur les données en entrée,
+         enregistre le modèle dans un fichier
+         et ajoute des informations aux infos du modèle puis les enregistre dans un fichier
+
+    Params :
+        X_train (np.array): les variables explicatives des données d'entrainement
+        y_train (np.array): vecteur de la variable cible des données d'entrainement
+        X_test (np.array): les variables explicatives des données de test
+        y_test (np.array): vecteur de la variable cible des données de test
+        infos (pandas.df): dataframe contenant certaines informations sur les données utilisées
+    
+    Returns:
+        None
+    """
+
     model = RandomForestClassifier()
     model.fit(X_train, np.ravel(y_train))
 
@@ -78,67 +105,35 @@ def entrainement(X_train, X_test, y_train, y_test, infos):
 
 
 def charger_modele():
+    """ Charge le modèle enregistré au préalable dans un fichier dedié
+
+    Returns :
+        l'objet correspondant au modèle
+    """
     model = joblib.load("app/static/ml_model.joblib.pkl")
     return model
 
-# def save_data(model, X_test, y_test, y_train):
-#     """ Enregistre les donnees du modele :
-#             - Type de modele utilise
-#             - Accuracy, Precision et Recall
-#             - Nb de donnees d'entrainement / de test
-#             - pourcentage de tirages gagnants
 
-#     Params:
-#         model (obj): le modele de machine learning
-#         X_test (np.array): les variables explicatives des données de test
-#         y_test (np.array): vecteur de la variable cible des données de test
-    
-#     Returns:
-#         None
-#     """
-#     pred = model.predict(X_test)
-#     # métriques
-#     accuracy = accuracy_score(y_test, pred)
-#     precision = precision_score(y_test, pred, average='binary', zero_division=1)
-#     recall = recall_score(y_test, pred, average='binary')
-
-#     proba = model.predict_proba(X_test)
-#     pmean = proba[:,1].mean() # probabilité moyenne de gagner sur le jeu de test
-
-#     y = pd.concat([y_train, y_test])
-#     # nombre de tirages gagnants
-#     nw = np.count_nonzero(y)
-#     # pourcentage de gagnants 
-#     pw = nw / (len(y)-nw)
-#     N = len(y) 
-
-#     # écrire tout dans un df
-#     values = ["Random Forest", accuracy, precision, recall, pmean, pw, N, 0.2]
-#     indexes = ["Modele","Accuracy", "Precision", "Recall", "Probabilité moyenne", "Pourcentage de gagnants", "Nombre de données", "Jeu de test"]
-#     df = pd.DataFrame(values, columns=["Valeur"], index=indexes)
-#     df.to_csv("app/static/data_model.csv", index=True)
-
-#     return(None)
-
-
-def predire(model, x):
-    """ Fonction qui prédit la probabilité qu'une suite x de nombre soit gagnante, 
+def predire(model, x, date = None):
+    """ Fonction qui prédit la probabilité qu'une suite x de nombres soit gagnante, 
         selon le modèle model
+        Si la suite est jouée à la date donnée ou le jour même par défaut 
 
     Args:
-        model (type??): le modèle de prédiction
-        x (list of int): la série d'entiers correspondant a une grille jouée à l'euromilion
+        model (obj): le modèle de prédiction
+        x (list of int): la série d'entiers correspondant a une grille jouée à l'euromillion
 
     Returns:
         float: la probabilité que la suite jouée x soit gagnante
 
     """
     # ajout de la date au tirage
-    today = datetime.date.today()
-    annee = today.strftime("%Y")
-    mois = today.strftime("%m")
-    jour = today.strftime("%d")
-    delta = (datetime.datetime.now() - datetime.datetime.strptime("2004-01-01", "%Y-%m-%d")).days
+    if date is None:
+        date = datetime.date.today()
+    annee = date.strftime("%Y")
+    mois = date.strftime("%m")
+    jour = date.strftime("%d")
+    delta = (date - datetime.datetime.strptime("2004-01-01", "%Y-%m-%d").date()).days
     x = np.append(x, [annee, mois, jour, delta])
     
     proba = model.predict_proba(x.reshape(1, -1))
@@ -163,7 +158,7 @@ def tirer_un_bon(model, prob_min):
     tirage_best = [] # enregistrement du meilleur tirage visité
     prob_best = 0 # et de sa probabilité de gagner
 
-    # arret au bout de k itérations si impossible de trouver une proba > prob_min
+    # arret au bout de Kmax itérations si impossible de trouver une proba > prob_min
     # retenir le meilleur tirage calculé dans ce cas avec sa proba
     while k < Kmax:
         tirage = serie_generator()

@@ -47,18 +47,22 @@ async def GetModelInformations():
 @app.put("/api/model")
 async def addDataToModel(tirage : Tirage, date : datetime.date, winner : int, gain : int):
     """ Permet d'enrichir le modele d'une donnee supplementaire """
+    # vérification du format des données
+    if not utils.check_data(tirage) :
+        return {"Erreur": "Impossible d'ajouter une donnée de ce format"}
+    # ajout de la donnée au fichier
     utils.add_data(tirage, date, winner, gain)
     return {"Titre": "Nouvelle donnee enregistrée", 
             "tirage": tirage, 
             "date": date,
             "winner": winner,
-            "gain": gain
+            "gain": gain,
             }
 
 @app.get("/api/model/train")
 async def retrainModel():
     """ Réentraine le modele """
-    X_train, X_test, y_train, y_test, infos = ml_models.lecture_donnees("app/data/data.csv")
+    X_train, X_test, y_train, y_test, infos = ml_models.traitement_donnees("app/data/data.csv")
     ml_models.entrainement(X_train, X_test, y_train, y_test, infos)
     return {"message": "Entrainement effectué"}
 
