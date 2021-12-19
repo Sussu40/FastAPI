@@ -4,30 +4,11 @@ from ...endpoints.utils import serie_generator
 
 # Objectif du fichier : créer un nouveau csv contenant des séries perdantes et la variable cible
 
-# def processing(fichier_source) :
-#     """ Lit le fichier donné et ajoute une variable 
-
-#     Params:
-#         fichier_source (str): chemin vers le fichier contenant les données
-    
-#     Returns:
-#         le dataframe des données avec en plus la variable "Winning serie"
-    
-#     """
-#     data = pd.read_csv(fichier_source, sep=";")
-
-#     # # Ajout de la variable cible au dataframe
-#     # size = len(data)
-#     # y = np.ones(size) # variable cible
-#     # data.insert(9, "Winning Serie", y)
-
-#     return(data)
-
 
 def data_generator(data, date):
     """ Génération d'une suite de numéros et l'ajoute aux données
     
-        Params:
+    Params:
         data (pd.df): dataframe contenant la liste de tirages gagnants
         date (str): date du tirage généré
 
@@ -82,7 +63,7 @@ def data_generator_x_sorted(data, x, file):
     print("Les {} données générées ont bien été ajoutées au fichier {}".format(x*size, file))
 
 
-def data_generator_x(data, x, file):
+def data_generator_x(data, x:int=100, file):
     """ Génère x tirages non-gagnants par tirage gagnant
         les ajoute au dataframe des données
         Puis enregistre le tout dans un fichier (csv)
@@ -104,5 +85,3 @@ def data_generator_x(data, x, file):
     # enregistrer les données enrichies dans un nouveau csv
     data.to_csv(file, index=True)
     print("Les {} données générées ont bien été ajoutées au fichier {}".format(x*size, file))
-# lancer : 
-# data_generator_x(pd.read_csv("app/data/EuroMillions_numbers.csv", sep=";"), 100, "data.csv")
